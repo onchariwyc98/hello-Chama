@@ -1,72 +1,184 @@
-<div class="container-fluid">
-  <h3 class="fw-bold text-success mb-3">
-    <i class="bi bi-speedometer2 me-2"></i>
-    Welcome, <span id="userNameDisplay">User</span>!
-  </h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello Chama – Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body { font-family: "Roboto", sans-serif; background-color: #f8f9fa; margin:0; }
+    .progress { height:10px; border-radius:5px; }
+    .progress-bar { transition: width 0.5s; }
+    .content { padding: 2rem; }
+  </style>
+</head>
+<body>
+  <div class="container-fluid content">
+    <h3 class="fw-bold text-success mb-3">
+      <i class="bi bi-speedometer2 me-2"></i>Welcome, <span id="userNameDisplay">User</span>!
+    </h3>
 
-  <!-- Single-step progress bar -->
-  <div class="mb-3">
-    <div class="progress" style="height:10px; border-radius:5px;">
-      <div id="stepProgressBar" class="progress-bar" role="progressbar" style="width:0%; transition: width 0.5s;"></div>
+    <!-- Progress Bar -->
+    <div class="mb-3">
+      <div class="progress">
+        <div id="stepProgressBar" class="progress-bar bg-info" role="progressbar" style="width:0%;"></div>
+      </div>
     </div>
+
+    <div class="alert alert-info">
+      <p>Minimum steps to get started:</p>
+      <ul>
+        <li>Create and update your <strong>profile</strong>.</li>
+        <li>Set up your first <strong>group</strong> in the system.</li>
+        <li>Optionally, configure basic <strong>modules</strong>.</li>
+      </ul>
+      <button id="getStartedBtn" class="btn btn-success mt-2">
+        <i class="bi bi-play-fill me-2"></i>Get Started
+      </button>
+    </div>
+
+    <!-- Dynamic content container -->
+    <div id="contentContainer" class="mt-4"></div>
   </div>
 
-  <div class="alert alert-info">
-    <p>Minimum steps to get started:</p>
-    <ul>
-      <li>Create and update your <strong>profile</strong>.</li>
-      <li>Set up your first <strong>group</strong>.</li>
-      <li>Optionally, configure basic <strong>modules</strong>.</li>
-    </ul>
-    <button id="getStartedBtn" class="btn btn-success mt-2">
-      <i class="bi bi-play-fill me-2"></i>Get Started
-    </button>
-  </div>
+  <script>
+    const userNameDisplay = document.getElementById("userNameDisplay");
+    const getStartedBtn = document.getElementById("getStartedBtn");
+    const contentContainer = document.getElementById("contentContainer");
+    const stepProgressBar = document.getElementById("stepProgressBar");
 
-  <div id="contentContainer" class="mt-4"></div>
-</div>
+    // Show logged-in user name
+    userNameDisplay.textContent = sessionStorage.getItem("fullName") || "User";
 
-<script>
-const userNameDisplay = document.getElementById("userNameDisplay");
-const getStartedBtn = document.getElementById("getStartedBtn");
-const contentContainer = document.getElementById("contentContainer");
-const stepProgressBar = document.getElementById("stepProgressBar");
+    // All onboarding pages as JS strings
+    const pages = {
+      group: `
+        <h4 class="fw-bold text-success mb-3">Group Setup</h4>
+        <form id="basicGroupForm" class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Group / Chama Name</label>
+            <input type="text" class="form-control" id="groupName" placeholder="Enter group name" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Group Type</label>
+            <select id="groupType" class="form-select">
+              <option value="Savings">Savings</option>
+              <option value="Welfare">Welfare</option>
+              <option value="Investment">Investment</option>
+              <option value="Loans">Loans</option>
+              <option value="MerryGoRound">Merry-Go-Round</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="groupStartDate" required>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Purpose / Description</label>
+            <textarea class="form-control" id="groupDescription" rows="2" placeholder="Briefly describe the group"></textarea>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-success">Save & Continue</button>
+          </div>
+        </form>
+      `,
+      activities: `
+        <h4 class="fw-bold text-success mb-3">Select Group Activities</h4>
+        <form id="activitiesForm">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Welfare" id="actWelfare">
+            <label class="form-check-label" for="actWelfare">Welfare</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Merry-Go-Round" id="actMerry">
+            <label class="form-check-label" for="actMerry">Merry-Go-Round</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Table Banking" id="actTable">
+            <label class="form-check-label" for="actTable">Table Banking</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Investment" id="actInvest">
+            <label class="form-check-label" for="actInvest">Investment</label>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-success">Save & Continue</button>
+          </div>
+        </form>
+      `,
+      billing: `
+        <h4 class="fw-bold text-success mb-3">Billing Setup</h4>
+        <form id="billingForm">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="billing" value="Trial" id="trial" checked>
+            <label class="form-check-label" for="trial">Trial (Default)</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="billing" value="Paid" id="paid">
+            <label class="form-check-label" for="paid">Paid</label>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-success">Save & Continue</button>
+          </div>
+        </form>
+      `,
+      terms: `
+        <h4 class="fw-bold text-success mb-3">Accept Terms & Conditions</h4>
+        <form id="termsForm">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="acceptTerms" required>
+            <label class="form-check-label" for="acceptTerms">I accept the terms and conditions</label>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-success">Finish Onboarding</button>
+          </div>
+        </form>
+      `,
+      welcome: `
+        <h4 class="fw-bold text-success mb-3">Welcome to Your Group!</h4>
+        <p>You have successfully completed the onboarding process. Start using your group features now.</p>
+      `
+    };
 
-// Display user name
-userNameDisplay.textContent = sessionStorage.getItem("fullName") || "User";
+    // Function to load page and update progress bar
+    function loadPage(page, step) {
+      contentContainer.innerHTML = pages[page];
+      stepProgressBar.style.width = ({1:'20%',2:'40%',3:'60%',4:'80%',5:'100%'}[step] || '0%');
+      stepProgressBar.className = 'progress-bar ' + ({1:'bg-info',2:'bg-info',3:'bg-warning',4:'bg-warning',5:'bg-success'}[step] || 'bg-info');
 
-// Load content dynamically
-async function loadContent(url, step) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to load');
-    const html = await res.text();
-    contentContainer.innerHTML = html;
-    contentContainer.scrollIntoView({ behavior: "smooth" });
-
-    // Update progress bar
-    switch(step){
-      case 1:
-        stepProgressBar.style.width = "33%";
-        stepProgressBar.className = "progress-bar bg-info";
-        break;
-      case 2:
-        stepProgressBar.style.width = "66%";
-        stepProgressBar.className = "progress-bar bg-warning";
-        break;
-      case 3:
-        stepProgressBar.style.width = "100%";
-        stepProgressBar.className = "progress-bar bg-success";
-        break;
+      // Attach submit handlers dynamically
+      if(page==='group') {
+        document.getElementById('basicGroupForm').addEventListener('submit', e => {
+          e.preventDefault();
+          alert('Group details saved!');
+          loadPage('activities', 2);
+        });
+      }
+      if(page==='activities') {
+        document.getElementById('activitiesForm').addEventListener('submit', e => {
+          e.preventDefault();
+          loadPage('billing', 3);
+        });
+      }
+      if(page==='billing') {
+        document.getElementById('billingForm').addEventListener('submit', e => {
+          e.preventDefault();
+          const paidSelected = document.getElementById('paid').checked;
+          if(paidSelected) alert('Redirect to payment page'); // Replace with actual redirect
+          loadPage('terms', 4);
+        });
+      }
+      if(page==='terms') {
+        document.getElementById('termsForm').addEventListener('submit', e => {
+          e.preventDefault();
+          loadPage('welcome', 5);
+        });
+      }
     }
-  } catch(err) {
-    contentContainer.innerHTML = `<div class="alert alert-danger">Failed to load ${url}</div>`;
-    console.error(err);
-  }
-}
 
-// Get Started button → Load group.html and update progress
-getStartedBtn.addEventListener("click", () => {
-  loadContent('group.html', 1);
-});
-</script>
+    // Initial Get Started
+    getStartedBtn.addEventListener('click', () => loadPage('group', 1));
+  </script>
+</body>
+</html>

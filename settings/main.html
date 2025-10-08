@@ -90,6 +90,10 @@
       .sidebar-toggle { display: block; }
       .content { padding: 1rem; }
     }
+
+    .progress { height:10px; border-radius:5px; margin-bottom: 1rem; }
+    .progress-bar { transition: width 0.5s; }
+    .collapse-button { cursor:pointer; }
   </style>
 </head>
 
@@ -133,7 +137,24 @@
 
     <!-- Content Area -->
     <main class="content" id="mainContent">
-      <!-- Dashboard content loaded by default -->
+      <!-- Default Dashboard -->
+      <h3 class="fw-bold text-success mb-3">
+        <i class="bi bi-speedometer2 me-2"></i>Welcome, <span id="userNameDisplay">User</span>!
+      </h3>
+
+      <div class="alert alert-info">
+        <p>Minimum steps to get started:</p>
+        <ul>
+          <li>Create and update your <strong>profile</strong>.</li>
+          <li>Set up your first <strong>group</strong> in the system.</li>
+          <li>Optionally, configure basic <strong>modules</strong>.</li>
+        </ul>
+        <button id="getStartedBtn" class="btn btn-success mt-2">
+          <i class="bi bi-play-fill me-2"></i>Get Started
+        </button>
+      </div>
+
+      <div id="contentContainer"></div>
     </main>
   </div>
 
@@ -144,63 +165,126 @@
     const content = document.getElementById("mainContent");
     const toggleBtn = document.querySelector(".sidebar-toggle");
 
-    // Collapse sidebar by default on mobile
     if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
-
-    // Toggle sidebar on mobile
     toggleBtn.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
-
     window.addEventListener("resize", () => {
       if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
       else sidebar.classList.remove("collapsed");
     });
 
-    // Load user name from sessionStorage
     const username = sessionStorage.getItem("username") || "User";
     document.getElementById("welcomeName").textContent = `Hi, ${username}`;
+    document.getElementById("userNameDisplay").textContent = username;
 
-    // Sidebar navigation
     const navLinks = sidebar.querySelectorAll('a[data-page]');
     navLinks.forEach(link => {
-      link.addEventListener('click', async (e) => {
+      link.addEventListener('click', async e => {
         e.preventDefault();
         navLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
-        loadPage(link.getAttribute('data-page'));
-        if (window.innerWidth <= 992) sidebar.classList.add("collapsed"); // close sidebar on mobile
+        const page = link.getAttribute('data-page');
+        if(page==='group') loadGroupPage(1);
+        else loadPage(page);
+        if(window.innerWidth <= 992) sidebar.classList.add("collapsed");
       });
     });
 
-    // Profile button
-    document.getElementById("profileBtn").addEventListener("click", async (e) => {
+    document.getElementById("profileBtn").addEventListener("click", e => {
       e.preventDefault();
       navLinks.forEach(l => l.classList.remove('active'));
       loadPage("profile_management");
-      if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
+      if(window.innerWidth <= 992) sidebar.classList.add("collapsed");
     });
 
-    // Logout functionality
-    document.getElementById("logoutBtn").addEventListener("click", function(e){
+    document.getElementById("logoutBtn").addEventListener("click", e => {
       e.preventDefault();
       sessionStorage.clear();
       localStorage.clear();
       window.location.href = "../index.html";
     });
 
-    // Function to load pages into content area
     async function loadPage(page) {
       try {
-        const response = await fetch(`${page}.html`);
-        const html = await response.text();
+        const res = await fetch(`${page}.html`);
+        const html = await res.text();
         content.innerHTML = html;
-        content.scrollTop = 0; // focus at top
+        content.scrollTop = 0;
       } catch {
         content.innerHTML = `<p class="text-danger">Failed to load ${page}.html</p>`;
       }
     }
 
-    // Load default dashboard on page load
-    loadPage("dashboard");
+    // ------------------- Group Onboarding -------------------
+    const getStartedBtn = document.getElementById("getStartedBtn");
+    const contentContainer = document.getElementById("contentContainer");
+
+    function loadGroupPage(step=1){
+      contentContainer.innerHTML = `
+        <div class="mb-3">
+          <div class="progress">
+            <div id="stepProgressBar" class="progress-bar bg-info" style="width: ${step*20}%"></div>
+          </div>
+        </div>
+
+        <h3 class="fw-bold text-success mb-3">Group Setup</h3>
+
+        <div class="mb-3">
+          <button class="btn btn-success w-100 text-start collapse-button" data-bs-toggle="collapse" data-bs-target="#basicGroupCollapse" aria-expanded="true">
+            Basic Group Details
+          </button>
+          <div class="collapse show mt-2" id="basicGroupCollapse">
+            <form id="basicGroupForm" class="row g-3 p-3 border rounded">
+              <div class="col-md-4">
+                <label class="form-label">Group / Chama Name</label>
+                <input type="text" class="form-control" id="groupName" placeholder="Enter group name" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Group Type</label>
+                <select id="groupType" class="form-select">
+                  <option value="Savings">Savings</option>
+                  <option value="Welfare">Welfare</option>
+                  <option value="Investment">Investment</option>
+                  <option value="Loans">Loans</option>
+                  <option value="MerryGoRound">Merry-Go-Round</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="groupStartDate" required>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Purpose / Description</label>
+                <textarea class="form-control" id="groupDescription" rows="2" placeholder="Briefly describe the group"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Group Code / ID</label>
+                <input type="text" class="form-control" id="groupCode" readonly placeholder="Auto-generated">
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-success">Save & Continue</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+
+      const stepProgressBar = document.getElementById("stepProgressBar");
+      const basicGroupForm = document.getElementById("basicGroupForm");
+      const groupCodeInput = document.getElementById("groupCode");
+
+      function generateGroupCode() {
+        groupCodeInput.value = 'CHAMA-' + Math.floor(1000 + Math.random()*9000);
+      }
+
+      basicGroupForm.addEventListener("submit", e=>{
+        e.preventDefault();
+        if(!groupCodeInput.value) generateGroupCode();
+        alert('Basic Group Details saved!');
+        stepProgressBar.style.width = "40%";
+      });
+    }
+
+    getStartedBtn.addEventListener("click", ()=> loadGroupPage(1));
   </script>
 </body>
 </html>
