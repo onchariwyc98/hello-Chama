@@ -2,92 +2,153 @@
   <h3 class="fw-bold text-success mb-4"><i class="bi bi-layers-fill me-2"></i>Modules Setup</h3>
   <p>Select modules to activate for the selected activities.</p>
 
-  <div class="table-responsive">
-    <table class="table table-striped align-middle">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Module</th>
-          <th class="text-center">Activate</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Membership (Always active) -->
-        <tr data-activities="Welfare,MerryGoRound,TableBanking,Loaning,Investment">
-          <td>1</td>
-          <td><i class="bi bi-people-fill text-success me-2"></i>Membership</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox" checked disabled></td>
-        </tr>
-
-        <!-- Welfare Modules -->
-        <tr data-activities="Welfare">
-          <td>2</td>
-          <td><i class="bi bi-heart-fill text-success me-2"></i>Welfare Contributions</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-        <tr data-activities="Welfare">
-          <td>3</td>
-          <td><i class="bi bi-wallet2 text-success me-2"></i>Welfare Savings</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-
-        <!-- Merry Go Round Modules -->
-        <tr data-activities="MerryGoRound">
-          <td>4</td>
-          <td><i class="bi bi-arrow-repeat text-success me-2"></i>Merry Go Round</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-        <tr data-activities="MerryGoRound">
-          <td>5</td>
-          <td><i class="bi bi-cash-coin text-success me-2"></i>Accounts</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-        <tr data-activities="MerryGoRound">
-          <td>6</td>
-          <td><i class="bi bi-calendar-event-fill text-success me-2"></i>Meetings</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-
-        <!-- Table Banking Modules -->
-        <tr data-activities="TableBanking">
-          <td>7</td>
-          <td><i class="bi bi-bank2 text-success me-2"></i>Table Banking</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-        <tr data-activities="TableBanking">
-          <td>8</td>
-          <td><i class="bi bi-cash-coin text-success me-2"></i>Accounts</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-
-        <!-- Loaning Modules -->
-        <tr data-activities="Loaning">
-          <td>9</td>
-          <td><i class="bi bi-bank2 text-success me-2"></i>Loans</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-        <tr data-activities="Loaning">
-          <td>10</td>
-          <td><i class="bi bi-cash-coin text-success me-2"></i>Accounts</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-
-        <!-- Investment Modules -->
-        <tr data-activities="Investment">
-          <td>11</td>
-          <td><i class="bi bi-graph-up-arrow text-success me-2"></i>Investment Tracking</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-        <tr data-activities="Investment">
-          <td>12</td>
-          <td><i class="bi bi-cash-coin text-success me-2"></i>Accounts</td>
-          <td class="text-center"><input class="form-check-input" type="checkbox"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="text-end mt-3">
-      <button class="btn btn-success px-4 fw-semibold"><i class="bi bi-check-circle me-2"></i>Save Module Settings</button>
+  <div class="row g-3">
+    <!-- Membership (Always active) -->
+    <div class="col-12 col-md-6 col-lg-4" data-activities="Welfare,MerryGoRound,TableBanking,Loaning,Investment">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-people-fill text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Membership</span>
+          </div>
+          <input class="form-check-input" type="checkbox" checked disabled>
+        </div>
+      </div>
     </div>
+
+    <!-- Welfare Modules -->
+    <div class="col-12 col-md-6 col-lg-4" data-activities="Welfare">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-heart-fill text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Welfare Contributions</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4" data-activities="Welfare">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-wallet2 text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Welfare Savings</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+
+    <!-- Merry Go Round Modules -->
+    <div class="col-12 col-md-6 col-lg-4" data-activities="MerryGoRound">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-arrow-repeat text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Merry Go Round</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4" data-activities="MerryGoRound">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-cash-coin text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Accounts</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4" data-activities="MerryGoRound">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-calendar-event-fill text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Meetings</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Banking Modules -->
+    <div class="col-12 col-md-6 col-lg-4" data-activities="TableBanking">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-bank2 text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Table Banking</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4" data-activities="TableBanking">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-cash-coin text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Accounts</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+
+    <!-- Loaning Modules -->
+    <div class="col-12 col-md-6 col-lg-4" data-activities="Loaning">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-bank2 text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Loans</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4" data-activities="Loaning">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-cash-coin text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Accounts</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+
+    <!-- Investment Modules -->
+    <div class="col-12 col-md-6 col-lg-4" data-activities="Investment">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-graph-up-arrow text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Investment Tracking</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4" data-activities="Investment">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-center justify-content-between">
+          <div>
+            <i class="bi bi-cash-coin text-success me-2 fs-4"></i>
+            <span class="fw-semibold">Accounts</span>
+          </div>
+          <input class="form-check-input" type="checkbox">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-end mt-4">
+    <button class="btn btn-success px-4 fw-semibold"><i class="bi bi-check-circle me-2"></i>Save Module Settings</button>
   </div>
 </div>

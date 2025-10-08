@@ -53,7 +53,7 @@
     }
     .sidebar.collapsed { transform: translateX(-100%); }
 
-    .sidebar a, .sidebar .activity-link {
+    .sidebar a {
       display: block;
       color: #333;
       padding: 0.6rem 1rem;
@@ -65,10 +65,8 @@
       text-align: left;
       transition: all 0.2s;
     }
-    .sidebar a:hover, .sidebar .activity-link:hover { background: #e8f8f5; color: #00b894; }
-    .sidebar a.active, .sidebar .activity-link.active { background: #00b894; color: white; }
-
-    .modules-container { display: flex; flex-direction: column; gap: 0.3rem; padding-left: 1rem; }
+    .sidebar a:hover { background: #e8f8f5; color: #00b894; }
+    .sidebar a.active { background: #00b894; color: white; }
 
     /* Content */
     .content { flex: 1; padding: 2rem; background-color: #f8f9fa; overflow-y: auto; }
@@ -84,11 +82,6 @@
       width: 15px; height: 15px; display: flex;
       align-items: center; justify-content: center;
     }
-
-    /* Table styles */
-    table th { background: #00b894; color: white; font-weight: 500; }
-    table td, table th { vertical-align: middle; }
-    .form-check-input:checked { background-color: #00b894; border-color: #00b894; }
 
     /* Responsive */
     @media (max-width: 992px) {
@@ -132,26 +125,14 @@
     <div class="sidebar" id="sidebarMenu">
       <a href="#" class="active" data-page="dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
       <a href="#" data-page="group"><i class="bi bi-people-fill me-2"></i>Group Setup</a>
-      
-      <a href="#modulesSubmenu" data-bs-toggle="collapse" class="d-flex align-items-center">
-        <i class="bi bi-layers-fill me-2"></i>Modules Setup
-        <i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <div class="collapse ps-3 modules-container" id="modulesSubmenu">
-        <a href="#" class="activity-link active" data-activity="Welfare">Welfare</a>
-        <a href="#" class="activity-link" data-activity="MerryGoRound">Merry Go Round</a>
-        <a href="#" class="activity-link" data-activity="TableBanking">Table Banking</a>
-        <a href="#" class="activity-link" data-activity="Loaning">Loaning</a>
-        <a href="#" class="activity-link" data-activity="Investment">Investment</a>
-      </div>
-
+      <a href="#" data-page="modules"><i class="bi bi-layers-fill me-2"></i>Modules Setup</a>
       <a href="#" data-page="billing"><i class="bi bi-credit-card-2-front-fill me-2"></i>Billing</a>
       <a href="#" data-page="terms"><i class="bi bi-file-earmark-text-fill me-2"></i>Terms</a>
     </div>
 
     <!-- Content Area -->
     <main class="content" id="mainContent">
-      <!-- Default loaded content -->
+      <!-- Default content: Dashboard -->
     </main>
   </div>
 
@@ -163,10 +144,14 @@
     const toggleBtn = document.querySelector(".sidebar-toggle");
 
     // Collapse sidebar by default on mobile
-    if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
+    if (window.innerWidth <= 992) {
+      sidebar.classList.add("collapsed");
+    }
 
     // Toggle sidebar on mobile
-    toggleBtn.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
+    toggleBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+    });
 
     // Update sidebar on window resize
     window.addEventListener("resize", () => {
@@ -174,80 +159,43 @@
       else sidebar.classList.remove("collapsed");
     });
 
+    // Sidebar page links (Dashboard, Group, Modules, Billing, Terms)
     const navLinks = sidebar.querySelectorAll('a[data-page]');
-    const activityLinks = sidebar.querySelectorAll('.activity-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', async (e) => {
+        e.preventDefault();
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
 
-    // Function to load page/module
-    async function loadContent(pageOrModule, isModule=false) {
-      try {
-        const file = isModule ? 'modules.html' : `${pageOrModule}.html`;
-        const html = await (await fetch(file)).text();
-        content.innerHTML = html;
-
-        if(isModule){
-          activityLinks.forEach(l => l.classList.remove('active'));
-          const active = [...activityLinks].find(l => l.dataset.activity === pageOrModule);
-          if(active) active.classList.add('active');
-
-          // Auto-expand modules submenu
-          const modulesSubmenu = document.getElementById('modulesSubmenu');
-          if(!modulesSubmenu.classList.contains('show')){
-            new bootstrap.Collapse(modulesSubmenu, {toggle:true});
-          }
-
-          // Filter table rows
-          const rows = content.querySelectorAll('tr[data-activities]');
-          rows.forEach(row => {
-            const activities = row.dataset.activities.split(',');
-            row.style.display = activities.includes(pageOrModule) ? '' : 'none';
-          });
-
-        } else {
-          navLinks.forEach(l => l.classList.remove('active'));
-          const active = [...navLinks].find(l => l.dataset.page === pageOrModule);
-          if(active) active.classList.add('active');
-          const modulesSubmenu = document.getElementById('modulesSubmenu');
-          new bootstrap.Collapse(modulesSubmenu, {toggle:false});
+        const page = link.getAttribute('data-page');
+        try {
+          const response = await fetch(`${page}.html`);
+          const html = await response.text();
+          content.innerHTML = html;
+        } catch {
+          content.innerHTML = `<p class="text-danger">Failed to load ${page}.html</p>`;
         }
 
-        if(window.innerWidth <= 992) sidebar.classList.add('collapsed');
-        content.scrollIntoView({behavior:'smooth', block:'start'});
+        // Collapse sidebar on mobile after selection
+        if (window.innerWidth <= 992) sidebar.classList.add('collapsed');
+        // Scroll content into view
+        content.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    // Load default page: dashboard
+    async function loadDefault() {
+      try {
+        const response = await fetch('dashboard.html');
+        const html = await response.text();
+        content.innerHTML = html;
       } catch {
-        content.innerHTML = `<p class="text-danger">Failed to load ${pageOrModule}</p>`;
+        content.innerHTML = `<p class="text-danger">Failed to load dashboard.html</p>`;
       }
     }
+    loadDefault();
 
-    // Load last selected page/module or default
-    const savedPage = sessionStorage.getItem('selectedPage');
-    const savedModule = sessionStorage.getItem('selectedModule');
-
-    if(savedModule) loadContent(savedModule, true);
-    else if(savedPage) loadContent(savedPage);
-    else loadContent('dashboard');
-
-    // Page link clicks
-    navLinks.forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const page = link.getAttribute('data-page');
-        sessionStorage.setItem('selectedPage', page);
-        sessionStorage.removeItem('selectedModule');
-        loadContent(page);
-      });
-    });
-
-    // Module link clicks
-    activityLinks.forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const module = link.getAttribute('data-activity');
-        sessionStorage.setItem('selectedModule', module);
-        sessionStorage.removeItem('selectedPage');
-        loadContent(module, true);
-      });
-    });
-
-    // Logout
+    // Logout functionality
     document.getElementById("logoutBtn").addEventListener("click", function(e){
       e.preventDefault();
       sessionStorage.clear();
