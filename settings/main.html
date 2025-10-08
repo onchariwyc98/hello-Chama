@@ -17,7 +17,6 @@
       overflow-x: hidden;
     }
 
-    /* Navbar */
     .navbar {
       background-color: #1e2a38;
       color: white;
@@ -36,10 +35,8 @@
       display: none;
     }
 
-    /* Layout */
     .layout { display: flex; margin-top: 60px; min-height: calc(100vh - 60px); transition: all 0.3s; }
 
-    /* Sidebar */
     .sidebar {
       width: 250px;
       background: white;
@@ -70,13 +67,10 @@
 
     .modules-container { display: flex; flex-direction: column; gap: 0.3rem; padding-left: 1rem; }
 
-    /* Content */
     .content { flex: 1; padding: 2rem; background-color: #f8f9fa; overflow-y: auto; }
 
-    /* Profile Picture */
     .profile-pic { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #00b894; }
 
-    /* Notification badges */
     .notification-badge {
       position: absolute; top: 0; right: 0;
       background: red; color: white;
@@ -85,12 +79,10 @@
       align-items: center; justify-content: center;
     }
 
-    /* Table styles */
     table th { background: #00b894; color: white; font-weight: 500; }
     table td, table th { vertical-align: middle; }
     .form-check-input:checked { background-color: #00b894; border-color: #00b894; }
 
-    /* Responsive */
     @media (max-width: 992px) {
       .layout { flex-direction: column; }
       .sidebar { position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 1200; }
@@ -132,13 +124,13 @@
     <div class="sidebar" id="sidebarMenu">
       <a href="#" class="active" data-page="dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
       <a href="#" data-page="group"><i class="bi bi-people-fill me-2"></i>Group Setup</a>
-      
+
       <a href="#modulesSubmenu" data-bs-toggle="collapse" class="d-flex align-items-center">
         <i class="bi bi-layers-fill me-2"></i>Modules Setup
         <i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <div class="collapse ps-3 modules-container" id="modulesSubmenu">
-        <a href="#" class="activity-link active" data-activity="Welfare">Welfare</a>
+        <a href="#" class="activity-link" data-activity="Welfare">Welfare</a>
         <a href="#" class="activity-link" data-activity="MerryGoRound">Merry Go Round</a>
         <a href="#" class="activity-link" data-activity="TableBanking">Table Banking</a>
         <a href="#" class="activity-link" data-activity="Loaning">Loaning</a>
@@ -153,7 +145,6 @@
     <main class="content" id="mainContent">
       <h2 class="fw-bold text-success mb-3">Dashboard</h2>
       <p>Welcome to Hello Chama! This is your central dashboard where you can see group summaries, contributions, and recent updates.</p>
-
       <div class="row mt-4">
         <div class="col-md-4 mb-3">
           <div class="p-3 bg-white rounded shadow-sm">
@@ -177,7 +168,6 @@
     </main>
   </div>
 
-  <!-- Bootstrap + JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const sidebar = document.getElementById("sidebarMenu");
@@ -185,73 +175,83 @@
     const toggleBtn = document.querySelector(".sidebar-toggle");
 
     // Collapse sidebar by default on mobile
-    if (window.innerWidth <= 992) {
-      sidebar.classList.add("collapsed");
-    }
+    if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
 
-    // Toggle sidebar on mobile
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("collapsed");
-    });
-
-    // Update sidebar on window resize
+    toggleBtn.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
     window.addEventListener("resize", () => {
-      if (window.innerWidth <= 992) {
-        sidebar.classList.add("collapsed");
-      } else {
-        sidebar.classList.remove("collapsed");
-      }
+      if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
+      else sidebar.classList.remove("collapsed");
     });
 
-    // Sidebar page links
     const navLinks = sidebar.querySelectorAll('a[data-page]');
-    navLinks.forEach(link => {
-      link.addEventListener('click', async (e) => {
-        e.preventDefault();
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        const page = link.getAttribute('data-page');
-        try {
-          const response = await fetch(`${page}.html`);
-          const html = await response.text();
-          content.innerHTML = html;
-        } catch {
-          content.innerHTML = `<p class="text-danger">Failed to load ${page}.html</p>`;
-        }
-      });
-    });
-
-    // Modules Setup activity links
     const activityLinks = sidebar.querySelectorAll('.activity-link');
-    activityLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        activityLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        loadModules();
-      });
-    });
 
-    async function loadModules() {
-      const activeActivities = [...activityLinks].filter(link => link.classList.contains('active')).map(link => link.dataset.activity);
+    // Function to load a page/module
+    async function loadContent(pageOrModule, isModule=false) {
       try {
-        const res = await fetch('modules.html');
-        const html = await res.text();
+        const file = isModule ? 'modules.html' : `${pageOrModule}.html`;
+        const html = await (await fetch(file)).text();
         content.innerHTML = html;
-        const rows = content.querySelectorAll('tr[data-activities]');
-        rows.forEach(row => {
-          const activities = row.dataset.activities.split(',');
-          row.style.display = activities.some(a => activeActivities.includes(a)) ? '' : 'none';
-        });
+
+        // Highlight active item
+        if(isModule){
+          activityLinks.forEach(l => l.classList.remove('active'));
+          const active = [...activityLinks].find(l => l.dataset.activity === pageOrModule);
+          if(active) active.classList.add('active');
+          // Auto-expand modules submenu
+          const modulesSubmenu = document.getElementById('modulesSubmenu');
+          if(!modulesSubmenu.classList.contains('show')){
+            new bootstrap.Collapse(modulesSubmenu, {toggle:true});
+          }
+        } else {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = [...navLinks].find(l => l.dataset.page === pageOrModule);
+          if(active) active.classList.add('active');
+          const modulesSubmenu = document.getElementById('modulesSubmenu');
+          new bootstrap.Collapse(modulesSubmenu, {toggle:false});
+        }
+
+        if(window.innerWidth <= 992) sidebar.classList.add('collapsed');
+        content.scrollIntoView({behavior:'smooth', block:'start'});
       } catch {
-        content.innerHTML = `<p class="text-danger">Failed to load modules.html</p>`;
+        content.innerHTML = `<p class="text-danger">Failed to load ${pageOrModule}</p>`;
       }
     }
 
-    // Load default modules
-    loadModules();
+    // Load default or last saved page/module
+    const savedPage = sessionStorage.getItem('selectedPage');
+    const savedModule = sessionStorage.getItem('selectedModule');
 
-    // Logout functionality
+    if(savedModule){
+      loadContent(savedModule, true);
+    } else if(savedPage){
+      loadContent(savedPage);
+    } else {
+      loadContent('dashboard');
+    }
+
+    // Click events for page links
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const page = link.getAttribute('data-page');
+        sessionStorage.setItem('selectedPage', page);
+        sessionStorage.removeItem('selectedModule');
+        loadContent(page);
+      });
+    });
+
+    // Click events for module links
+    activityLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const module = link.getAttribute('data-activity');
+        sessionStorage.setItem('selectedModule', module);
+        sessionStorage.removeItem('selectedPage');
+        loadContent(module, true);
+      });
+    });
+
     document.getElementById("logoutBtn").addEventListener("click", function(e){
       e.preventDefault();
       sessionStorage.clear();
