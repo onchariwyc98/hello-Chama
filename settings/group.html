@@ -1,0 +1,207 @@
+<h3 class="fw-bold text-success mb-3">Group Setup</h3>
+
+<!-- 1. Basic Group Details -->
+<div class="mb-3">
+  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#basicGroupCollapse" aria-expanded="true">
+    Basic Group Details
+  </button>
+  <div class="collapse show mt-2" id="basicGroupCollapse">
+    <form id="basicGroupForm" class="row g-3 p-3 border rounded">
+      <div class="col-md-4">
+        <label for="groupName" class="form-label">Group / Chama Name</label>
+        <input type="text" class="form-control" id="groupName" placeholder="Enter group name" required>
+      </div>
+      <div class="col-md-4">
+        <label for="groupType" class="form-label">Group Type</label>
+        <select id="groupType" class="form-select">
+          <option value="Savings">Savings</option>
+          <option value="Welfare">Welfare</option>
+          <option value="Investment">Investment</option>
+          <option value="Loans">Loans</option>
+          <option value="MerryGoRound">Merry-Go-Round</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="groupStartDate" class="form-label">Start Date / Formation Date</label>
+        <input type="date" class="form-control" id="groupStartDate" required>
+      </div>
+      <div class="col-12">
+        <label for="groupDescription" class="form-label">Purpose / Description</label>
+        <textarea class="form-control" id="groupDescription" rows="2" placeholder="Briefly describe the group"></textarea>
+      </div>
+      <div class="col-md-4">
+        <label for="groupCode" class="form-label">Group Code / ID</label>
+        <input type="text" class="form-control" id="groupCode" readonly placeholder="Auto-generated">
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-success">Save Basic Details</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 2. Membership Details -->
+<div class="mb-3">
+  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#membershipCollapse" aria-expanded="false">
+    Membership Details
+  </button>
+  <div class="collapse mt-2" id="membershipCollapse">
+    <form id="membershipForm" class="row g-3 p-3 border rounded">
+      <div class="col-md-4">
+        <label for="maxMembers" class="form-label">Number of Members</label>
+        <input type="number" class="form-control" id="maxMembers" placeholder="Max allowed" min="1">
+      </div>
+      <div class="col-md-4">
+        <label for="memberRoles" class="form-label">Member Roles</label>
+        <input type="text" class="form-control" id="memberRoles" placeholder="Chairperson, Treasurer, Secretary, Member">
+      </div>
+      <div class="col-md-4">
+        <label for="membershipRules" class="form-label">Membership Rules</label>
+        <input type="text" class="form-control" id="membershipRules" placeholder="Eligibility criteria / joining conditions">
+      </div>
+      <div class="col-md-4">
+        <label for="contributionAmount" class="form-label">Contribution Amount</label>
+        <input type="number" class="form-control" id="contributionAmount" placeholder="Minimum / mandatory contribution">
+      </div>
+      <div class="col-md-4">
+        <label for="contributionFrequency" class="form-label">Contribution Frequency</label>
+        <select id="contributionFrequency" class="form-select">
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Quarterly">Quarterly</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-success">Save Membership Details</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 3. Financial Setup -->
+<div class="mb-3">
+  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#financialCollapse" aria-expanded="false">
+    Financial Setup
+  </button>
+  <div class="collapse mt-2" id="financialCollapse">
+    <form id="financialForm" class="row g-3 p-3 border rounded">
+      <div class="col-md-6">
+        <label for="bankDetails" class="form-label">Bank Account / Payment Details</label>
+        <input type="text" class="form-control" id="bankDetails" placeholder="Bank name, account number">
+      </div>
+      <div class="col-md-6">
+        <label for="loanRules" class="form-label">Loan Rules (if applicable)</label>
+        <input type="text" class="form-control" id="loanRules" placeholder="Eligibility, interest rates, repayment schedule">
+      </div>
+      <div class="col-md-6">
+        <label for="fundManagement" class="form-label">Treasury / Fund Management</label>
+        <input type="text" class="form-control" id="fundManagement" placeholder="How funds will be tracked and managed">
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-success">Save Financial Setup</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 4. Meetings & Operations -->
+<div class="mb-3">
+  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#meetingsCollapse" aria-expanded="false">
+    Meetings & Operations
+  </button>
+  <div class="collapse mt-2" id="meetingsCollapse">
+    <form id="meetingsForm" class="row g-3 p-3 border rounded">
+      <div class="col-md-4">
+        <label for="meetingFrequency" class="form-label">Meeting Frequency</label>
+        <select id="meetingFrequency" class="form-select">
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Adhoc">Ad-hoc</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="meetingLocation" class="form-label">Meeting Location / Mode</label>
+        <input type="text" class="form-control" id="meetingLocation" placeholder="Physical or Online platform">
+      </div>
+      <div class="col-md-4">
+        <label for="agendaTemplates" class="form-label">Agenda Templates</label>
+        <input type="text" class="form-control" id="agendaTemplates" placeholder="Optional">
+      </div>
+      <div class="col-md-4">
+        <label for="notificationPrefs" class="form-label">Notification Preferences</label>
+        <input type="text" class="form-control" id="notificationPrefs" placeholder="Email, SMS, App">
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-success">Save Meetings & Operations</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 5. Governance & Compliance -->
+<div class="mb-3">
+  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#governanceCollapse" aria-expanded="false">
+    Governance & Compliance
+  </button>
+  <div class="collapse mt-2" id="governanceCollapse">
+    <form id="governanceForm" class="row g-3 p-3 border rounded">
+      <div class="col-md-6">
+        <label for="rulesBylaws" class="form-label">Rules & Regulations / Bylaws</label>
+        <input type="text" class="form-control" id="rulesBylaws" placeholder="Policies for group operation">
+      </div>
+      <div class="col-md-6">
+        <label for="decisionProcess" class="form-label">Decision-Making Process</label>
+        <input type="text" class="form-control" id="decisionProcess" placeholder="Voting rules, quorum requirements">
+      </div>
+      <div class="col-md-6">
+        <label for="dataPrivacy" class="form-label">Data Privacy & Permissions</label>
+        <input type="text" class="form-control" id="dataPrivacy" placeholder="Who can see financial/member info">
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-success">Save Governance & Compliance</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 6. Optional Enhancements -->
+<div class="mb-3">
+  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#enhancementsCollapse" aria-expanded="false">
+    Optional Enhancements
+  </button>
+  <div class="collapse mt-2" id="enhancementsCollapse">
+    <form id="enhancementsForm" class="row g-3 p-3 border rounded">
+      <div class="col-md-4">
+        <label for="groupLogo" class="form-label">Group Logo / Icon</label>
+        <input type="file" class="form-control" id="groupLogo" accept="image/*">
+      </div>
+      <div class="col-md-4">
+        <label for="customFields" class="form-label">Custom Fields</label>
+        <input type="text" class="form-control" id="customFields" placeholder="Region, category, etc.">
+      </div>
+      <div class="col-md-4">
+        <label for="notes" class="form-label">Notes / Remarks</label>
+        <input type="text" class="form-control" id="notes" placeholder="Any additional info">
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-success">Save Optional Enhancements</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const groupCodeInput = document.getElementById('groupCode');
+  const basicGroupForm = document.getElementById('basicGroupForm');
+
+  function generateGroupCode() {
+    const randomCode = 'CHAMA-' + Math.floor(1000 + Math.random() * 9000);
+    groupCodeInput.value = randomCode;
+  }
+
+  basicGroupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!groupCodeInput.value) generateGroupCode();
+    alert('Basic Group Details saved successfully!');
+  });
+</script>

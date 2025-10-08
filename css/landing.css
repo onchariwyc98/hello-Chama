@@ -1,0 +1,89 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  background-color: #f0f2f5;
+  scroll-behavior: smooth;
+}
+
+/* Navbar */
+.navbar-brand {
+  font-weight: 700;
+}
+
+.navbar .btn-success {
+  border-radius: 25px;
+  padding: 6px 20px;
+  font-weight: 500;
+}
+
+/* Hero Section */
+.hero {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  margin-top: 56px; /* fixed navbar height */
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #4CAF50, #81C784);
+  color: #fff;
+  border-radius: 16px;
+  padding: 40px 30px;
+  max-width: 700px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.hero-card h1 {
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.hero-card p.lead {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.btn-hero {
+  background-color: #fff;
+  color: #4CAF50;
+  border-radius: 25px;
+  padding: 12px 30px;
+  font-weight: 500;
+  transition: background 0.3s, color 0.3s;
+}
+
+.btn-hero:hover {
+  background-color: #43A047;
+  color: #fff;
+}
+
+/* Features Section */
+.features .feature-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.features .feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.feature-card h3 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.feature-card p {
+  color: #555;
+}
+
+/* Footer */
+footer p {
+  margin: 0;
+  color: #777;
+}

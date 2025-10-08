@@ -1,0 +1,101 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+h1, h3 {
+  color: #333;
+}
+
+h3.text-success {
+  color: #4CAF50;
+}
+
+p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Registration form inputs - compact */
+.form-floating input {
+  height: 40px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+
+.form-floating {
+  margin-bottom: 15px;
+}
+
+/* Register Button */
+.btn-register {
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 25px;
+  padding: 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-register i {
+  font-size: 1.1rem;
+}
+
+.btn-register:hover {
+  background-color: #43A047;
+  transform: translateY(-2px);
+}
+
+/* Social buttons */
+.btn-primary, .btn-danger {
+  border-radius: 25px;
+  padding: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: transform 0.2s;
+}
+
+.btn-primary:hover, .btn-danger:hover {
+  transform: translateY(-2px);
+}
+
+/* Info Panel Styling */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+footer {
+  font-size: 0.8rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .row.flex-column.flex-md-row {
+    flex-direction: column !important;
+  }
+  .col-md-6 {
+    width: 100%;
+  }
+  .d-flex.gap-2.flex-column.flex-sm-row {
+    flex-direction: column !important;
+  }
+  .d-flex.gap-2.flex-column.flex-sm-row button {
+    width: 100%;
+  }
+}
