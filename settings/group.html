@@ -1,99 +1,134 @@
-<h3 class="fw-bold text-success mb-3">Group Setup</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selectable Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
 
-<!-- 1. Basic Group Details -->
-<div class="mb-3">
-  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#basicGroupCollapse" aria-expanded="true">
-    Basic Group Details
-  </button>
-  <div class="collapse show mt-2" id="basicGroupCollapse">
-    <form id="basicGroupForm" class="row g-3 p-3 border rounded">
-      <div class="col-md-4 col-12">
-        <label for="groupName" class="form-label">Group / Chama Name</label>
-        <input type="text" class="form-control" id="groupName" placeholder="Enter group name" required>
-      </div>
-      <div class="col-md-4 col-12">
-        <label for="groupType" class="form-label">Group Type</label>
-        <select id="groupType" class="form-select">
-          <option value="Savings">Savings</option>
-          <option value="Welfare">Welfare</option>
-          <option value="Investment">Investment</option>
-          <option value="Loans">Loans</option>
-          <option value="MerryGoRound">Merry-Go-Round</option>
-        </select>
-      </div>
-      <div class="col-md-4 col-12">
-        <label for="groupStartDate" class="form-label">Start Date / Formation Date</label>
-        <input type="date" class="form-control" id="groupStartDate" required>
-      </div>
-      <div class="col-12">
-        <label for="groupDescription" class="form-label">Purpose / Description</label>
-        <textarea class="form-control" id="groupDescription" rows="2" placeholder="Briefly describe the group"></textarea>
-      </div>
-      <div class="col-md-4 col-12">
-        <label for="groupCode" class="form-label">Group Code / ID</label>
-        <input type="text" class="form-control" id="groupCode" readonly placeholder="Auto-generated">
-      </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-success w-100">Save Basic Details & Continue</button>
-      </div>
-    </form>
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .card {
+      width: 200px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      padding: 15px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+
+    .card.selected {
+      background-color: #4CAF50;
+      color: white;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    }
+
+    .card h3 {
+      margin: 0 0 10px 0;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: inherit;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h2>Select Your Activities</h2>
+  <div class="card-container">
+    <div class="card" data-value="Welfare">
+      <h3>Welfare</h3>
+      <p>Community support activities.</p>
+    </div>
+    <div class="card" data-value="Savings">
+      <h3>Savings</h3>
+      <p>Group savings and investments.</p>
+    </div>
+    <div class="card" data-value="Merry Go Round">
+      <h3>Merry Go Round</h3>
+      <p>Rotate contributions among members.</p>
+    </div>
+    <div class="card" data-value="Investment">
+      <h3>Investment</h3>
+      <p>Invest in group projects.</p>
+    </div>
   </div>
-</div>
 
-<!-- Membership Details -->
-<div class="mb-3">
-  <button class="btn btn-success w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#membershipCollapse" aria-expanded="false">
-    Membership Details
-  </button>
-  <div class="collapse mt-2" id="membershipCollapse">
-    <form id="membershipForm" class="row g-3 p-3 border rounded">
-      <div class="col-md-4 col-12">
-        <label for="maxMembers" class="form-label">Number of Members</label>
-        <input type="number" class="form-control" id="maxMembers" placeholder="Max allowed" min="1">
-      </div>
-      <div class="col-md-4 col-12">
-        <label for="memberRoles" class="form-label">Member Roles</label>
-        <input type="text" class="form-control" id="memberRoles" placeholder="Chairperson, Treasurer, Secretary, Member">
-      </div>
-      <div class="col-md-4 col-12">
-        <label for="membershipRules" class="form-label">Membership Rules</label>
-        <input type="text" class="form-control" id="membershipRules" placeholder="Eligibility criteria / joining conditions">
-      </div>
-      <div class="col-md-4 col-12">
-        <label for="contributionAmount" class="form-label">Contribution Amount</label>
-        <input type="number" class="form-control" id="contributionAmount" placeholder="Minimum / mandatory contribution">
-      </div>
-      <div class="col-md-4 col-12">
-        <label for="contributionFrequency" class="form-label">Contribution Frequency</label>
-        <select id="contributionFrequency" class="form-select">
-          <option value="Weekly">Weekly</option>
-          <option value="Monthly">Monthly</option>
-          <option value="Quarterly">Quarterly</option>
-        </select>
-      </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-success w-100">Save Membership & Continue</button>
-      </div>
-    </form>
-  </div>
-</div>
+  <button id="submitBtn">Submit</button>
 
-<!-- Add Financial, Meetings, Governance sections similarly -->
+  <script>
+    const cards = document.querySelectorAll('.card');
+    const submitBtn = document.getElementById('submitBtn');
 
-<script>
-  const groupCodeInput = document.getElementById('groupCode');
-  const basicGroupForm = document.getElementById('basicGroupForm');
+    let selectedCards = [];
 
-  function generateGroupCode() {
-    return 'CHAMA-' + Math.floor(1000 + Math.random() * 9000);
-  }
+    // Toggle selection
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const value = card.getAttribute('data-value');
 
-  basicGroupForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!groupCodeInput.value) groupCodeInput.value = generateGroupCode();
-    alert('Basic Group Details saved successfully!');
+        if (card.classList.contains('selected')) {
+          card.classList.remove('selected');
+          selectedCards = selectedCards.filter(item => item !== value);
+        } else {
+          card.classList.add('selected');
+          selectedCards.push(value);
+        }
 
-    // Call main dashboard function to load next step
-    if (typeof groupCompleted === "function") groupCompleted(); // triggers modules setup
-  });
-</script>
+        console.log("Selected cards:", selectedCards);
+      });
+    });
+
+    // Handle submit
+    submitBtn.addEventListener('click', () => {
+      if (selectedCards.length === 0) {
+        alert("Please select at least one activity.");
+      } else {
+        alert("You selected: " + selectedCards.join(", "));
+        // Replace with your action, e.g., send data to server
+      }
+    });
+  </script>
+</body>
+</html>

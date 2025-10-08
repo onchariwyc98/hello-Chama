@@ -1,23 +1,93 @@
 <h4 class="fw-bold text-success mb-3">Step 2: Select Group Activities</h4>
+
 <form id="activitiesForm">
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="Welfare" id="actWelfare">
-    <label class="form-check-label" for="actWelfare">Welfare</label>
+  <div class="row g-3">
+    <!-- Activity Card Template -->
+    <div class="col-6 col-md-3">
+      <div class="card activity-card h-100 text-center p-3" data-value="Welfare">
+        <input type="checkbox" class="d-none" id="actWelfare" value="Welfare">
+        <label for="actWelfare" class="mb-0">
+          <i class="bi bi-heart-fill fs-2 text-success mb-2"></i>
+          <div>Welfare</div>
+        </label>
+      </div>
+    </div>
+
+    
+
+    <div class="col-6 col-md-3">
+      <div class="card activity-card h-100 text-center p-3" data-value="Merry-Go-Round">
+        <input type="checkbox" class="d-none" id="actMerryGoRound" value="Merry-Go-Round">
+        <label for="actMerryGoRound" class="mb-0">
+          <i class="bi bi-coin fs-2 text-success mb-2"></i>
+          <div>Merry-Go-Round</div>
+        </label>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <div class="card activity-card h-100 text-center p-3" data-value="Table Banking">
+        <input type="checkbox" class="d-none" id="actTableBanking" value="Table Banking">
+        <label for="actTableBanking" class="mb-0">
+          <i class="bi bi-table fs-2 text-success mb-2"></i>
+          <div>Table Banking</div>
+        </label>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+      <div class="card activity-card h-100 text-center p-3" data-value="Investment">
+        <input type="checkbox" class="d-none" id="actInvestment" value="Investment">
+        <label for="actInvestment" class="mb-0">
+          <i class="bi bi-bar-chart-line-fill fs-2 text-success mb-2"></i>
+          <div>Investment</div>
+        </label>
+      </div>
+    </div>
   </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="Merry-Go-Round" id="actMerryGoRound">
-    <label class="form-check-label" for="actMerryGoRound">Merry-Go-Round</label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="Table Banking" id="actTableBanking">
-    <label class="form-check-label" for="actTableBanking">Table Banking</label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="Investment" id="actInvestment">
-    <label class="form-check-label" for="actInvestment">Investment</label>
-  </div>
-  <div class="mt-3 d-flex justify-content-between">
+
+  <div class="mt-4 d-flex justify-content-between">
     <button type="button" class="btn btn-secondary" onclick="loadStep('step1_group.html',1)">Back</button>
     <button type="submit" class="btn btn-success">Save & Continue</button>
   </div>
 </form>
+
+<style>
+  .activity-card {
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  .activity-card:hover {
+    border-color: #28a745;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .activity-card input:checked + label {
+    color: #fff;
+    background-color: #28a745;
+    border-radius: 8px;
+    display: block;
+    padding: 1rem;
+  }
+</style>
+
+<script>
+  // Toggle card selection on click
+  document.querySelectorAll('.activity-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const checkbox = card.querySelector('input[type="checkbox"]');
+      checkbox.checked = !checkbox.checked;
+      card.classList.toggle('selected', checkbox.checked);
+    });
+  });
+
+  // Optional: form submit validation
+  document.getElementById('activitiesForm').addEventListener('submit', function(e) {
+    const checked = this.querySelectorAll('input[type="checkbox"]:checked');
+    if (checked.length === 0) {
+      e.preventDefault();
+      alert('Please select at least one activity to continue.');
+    }
+  });
+</script>

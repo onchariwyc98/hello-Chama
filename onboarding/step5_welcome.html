@@ -1,15 +1,38 @@
-<h4 class="fw-bold text-success mb-3">Step 5: Summary</h4>
-<p>Review your selections before starting to use the app:</p>
-<div class="card">
-  <div class="card-body">
-    <h5>Group: <span id="summaryGroupName"></span></h5>
-    <p>Purpose: <span id="summaryGroupDesc"></span></p>
-    <h6>Activities Selected:</h6>
-    <ul id="summaryActivities"></ul>
-    <p>Billing: <span id="summaryBilling"></span></p>
-    <button id="startAppBtn" class="btn btn-success mt-3" onclick="window.location.href='../group_app/group_home.html'">
-  Accept & Start Using App
-</button>
+<h4 class="text-success fw-bold mb-3"><i class="bi bi-check2-circle me-2"></i>Step 5: Summary & Start Using App</h4>
 
+<div class="card mb-3">
+  <div class="card-body">
+    <h5 class="card-title fw-bold">Your Group Details</h5>
+    <p><strong>Group Name:</strong> <span id="summaryGroupName">-</span></p>
+    <p><strong>Purpose:</strong> <span id="summaryGroupDescription">-</span></p>
+    <p><strong>Activities:</strong> <span id="summaryActivities">-</span></p>
+    <p><strong>Billing:</strong> <span id="summaryBilling">-</span></p>
   </div>
 </div>
+
+<div class="d-grid">
+  <button id="startAppBtn" class="btn btn-success btn-lg">
+    <i class="bi bi-play-fill me-2"></i>Accept & Start Using App
+  </button>
+</div>
+
+<script>
+(() => {
+  // Fill summary with data from onboarding
+  const groupName = onboardingData.group.name || '-';
+  const groupDescription = onboardingData.group.description || '-';
+  const activities = onboardingData.activities.length ? onboardingData.activities.join(', ') : '-';
+  const billing = onboardingData.billing || '-';
+
+  document.getElementById('summaryGroupName').textContent = groupName;
+  document.getElementById('summaryGroupDescription').textContent = groupDescription;
+  document.getElementById('summaryActivities').textContent = activities;
+  document.getElementById('summaryBilling').textContent = billing;
+
+  // Button click -> navigate to main app page
+  document.getElementById('startAppBtn').addEventListener('click', () => {
+    // TODO: save onboardingData to backend (later)
+    window.location.href = '../group_app/group_home.html';
+  });
+})();
+</script>

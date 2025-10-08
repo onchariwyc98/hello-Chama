@@ -1,14 +1,52 @@
-<h4 class="fw-bold text-success mb-3">Step 1: Set Up Your First Group</h4>
-<form id="groupForm" class="row g-3">
-  <div class="col-md-6">
-    <label class="form-label">Group / Chama Name</label>
-    <input type="text" class="form-control" id="groupName" placeholder="Enter group name" required>
-  </div>
+<h4 class="text-success fw-bold mb-3"><i class="bi bi-people-fill me-2"></i>Step 1: Create Your Group</h4>
+
+<form id="groupForm" class="row g-3" novalidate>
+
+  <!-- Group Name -->
   <div class="col-12">
-    <label class="form-label">Purpose / Description</label>
-    <textarea class="form-control" id="groupDescription" rows="2" placeholder="Briefly describe the group"></textarea>
+    <label for="groupName" class="form-label fw-bold">Group Name <span class="text-danger">*</span></label>
+    <input type="text" class="form-control form-control-lg" id="groupName" placeholder="Type group name here" required>
+    <div class="invalid-feedback fw-bold text-danger">
+      Group name is required!
+    </div>
   </div>
-  <div class="col-12 d-flex justify-content-end">
-    <button type="submit" class="btn btn-success">Save & Continue</button>
+
+  <!-- Group Purpose -->
+  <div class="col-12">
+    <label for="groupDescription" class="form-label fw-bold">Purpose / Description <span class="text-danger">*</span></label>
+    <textarea class="form-control form-control-lg" id="groupDescription" rows="3" placeholder="E.g., Savings, Merry-Go-Round" required></textarea>
+    <div class="invalid-feedback fw-bold text-danger">
+      Please add a short description!
+    </div>
   </div>
+
+  <!-- Save & Continue -->
+  <div class="col-12 d-grid">
+    <button type="submit" class="btn btn-success btn-lg">
+      <i class="bi bi-check-circle me-2"></i>Save & Continue
+    </button>
+  </div>
+
 </form>
+
+<script>
+(() => {
+  const form = document.getElementById('groupForm');
+  form.addEventListener('submit', event => {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+      form.classList.add('was-validated');
+    } else {
+      event.preventDefault();
+      // Save group data and move to next step
+      const groupData = {
+        name: document.getElementById('groupName').value,
+        description: document.getElementById('groupDescription').value
+      };
+      console.log('Group Saved:', groupData); // replace with next step load
+      alert('Saved! Moving to next step.');
+    }
+  });
+})();
+</script>

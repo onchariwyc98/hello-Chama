@@ -1,71 +1,140 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hello Chama – Home</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-<style>
-body { font-family: "Roboto", sans-serif; background-color: #f8f9fa; margin:0; overflow-x:hidden; }
-.navbar { background-color: #1e2a38; color:white; height:60px; position:fixed; top:0; left:0; right:0; z-index:1100; }
-.navbar .navbar-brand { color:#00b894; font-weight:600; }
-.content { padding:80px 2rem 2rem 2rem; }
-.card { margin-bottom:1rem; }
-.profile-pic { width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid #00b894; }
-</style>
-</head>
-<body>
+<h4 class="text-success fw-bold mb-3"><i class="bi bi-list-check me-2"></i>Step 2: Select Activities</h4>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg px-3 d-flex align-items-center">
-  <a class="navbar-brand" href="#">Hello Chama</a>
-  <div class="ms-auto d-flex align-items-center gap-3">
-    <div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-        <img src="../img/profile1.jpg" alt="Profile" class="profile-pic me-2">
-        <span id="welcomeName">User</span>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end shadow">
-        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-      </ul>
+<p class="fw-bold">Tap the activities your group will do:</p>
+
+<form id="activitiesForm" class="row g-3">
+
+     <div class="col-6 col-sm-4 col-md-3">
+    <div class="card activity-card text-center p-3" data-value="Welfare">
+      <i class="bi bi-heart fs-3 mb-2"></i>
+      <div class="fw-bold">Welfare</div>
+      <small>Support members</small>
     </div>
   </div>
-</nav>
 
-<div class="content">
-  <h3 class="text-success mb-3">Welcome to Your Group Dashboard!</h3>
-  <p>Your group setup is complete. Here you can manage your group activities, members, billing, and modules.</p>
-
-  <div class="card">
-    <div class="card-body">
-      <h5 id="groupNameDisplay">Group Name</h5>
-      <p id="groupPurposeDisplay">Group Purpose</p>
-      <h6>Selected Activities:</h6>
-      <ul id="activityList"></ul>
+  <!-- Activity Cards -->
+  <div class="col-6 col-sm-4 col-md-3">
+    <div class="card activity-card text-center p-3" data-value="Savings">
+      <i class="bi bi-wallet2 fs-3 mb-2"></i>
+      <div class="fw-bold">Savings</div>
+      <small>Keep money safe</small>
     </div>
   </div>
-</div>
+
+  <div class="col-6 col-sm-4 col-md-3">
+    <div class="card activity-card text-center p-3" data-value="Merry-Go-Round">
+      <i class="bi bi-arrow-repeat fs-3 mb-2"></i>
+      <div class="fw-bold">Merry-Go-Round</div>
+      <small>Rotate contributions</small>
+    </div>
+  </div>
+
+  <div class="col-6 col-sm-4 col-md-3">
+    <div class="card activity-card text-center p-3" data-value="Loans">
+      <i class="bi bi-cash-stack fs-3 mb-2"></i>
+      <div class="fw-bold">Loans</div>
+      <small>Borrow or lend</small>
+    </div>
+  </div>
+
+  
+
+  <div class="col-6 col-sm-4 col-md-3">
+    <div class="card activity-card text-center p-3" data-value="Shares">
+      <i class="bi bi-bar-chart fs-3 mb-2"></i>
+      <div class="fw-bold">Investment</div>
+      <small>Invest together</small>
+    </div>
+  </div>
+
+  <div class="col-6 col-sm-4 col-md-3">
+    <div class="card activity-card text-center p-3" data-value="Shares">
+      <i class="bi bi-bar-chart fs-3 mb-2"></i>
+      <div class="fw-bold">Share</div>
+      <small>Invest together</small>
+    </div>
+  </div>
+
+ 
+
+  <div class="col-12 d-grid">
+    <button type="submit" class="btn btn-success btn-lg mt-3">
+      <i class="bi bi-check-circle me-2"></i>Save & Continue
+    </button>
+  </div>
+
+</form>
 
 <script>
-  // Load onboarding data from sessionStorage (if exists)
+(() => {
+  const form = document.getElementById('activitiesForm');
+  const cards = document.querySelectorAll('.activity-card');
+
   const onboardingData = JSON.parse(sessionStorage.getItem('onboardingData') || '{}');
-  if(onboardingData.group){
-    document.getElementById('groupNameDisplay').textContent = onboardingData.group.name || 'Group Name';
-    document.getElementById('groupPurposeDisplay').textContent = onboardingData.group.description || 'Group Purpose';
-  }
-  if(onboardingData.activities){
-    const ul = document.getElementById('activityList');
-    onboardingData.activities.forEach(act => {
-      const li = document.createElement('li');
-      const subs = onboardingData.subModules?.[act]?.join(', ') || 'default';
-      li.textContent = `${act} (${subs})`;
-      ul.appendChild(li);
+  const selectedActivities = new Set(onboardingData.activities || []);
+
+  // Pre-select previous activities
+  cards.forEach(card => {
+    if (selectedActivities.has(card.dataset.value)) {
+      card.classList.add('bg-success', 'border-success', 'text-white');
+    }
+  });
+
+  // Toggle selection
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const value = card.dataset.value;
+      if (selectedActivities.has(value)) {
+        selectedActivities.delete(value);
+        card.classList.remove('bg-success', 'border-success', 'text-white');
+      } else {
+        selectedActivities.add(value);
+        card.classList.add('bg-success', 'border-success', 'text-white');
+      }
     });
-  }
+  });
+
+  // Form submit
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (selectedActivities.size === 0) {
+      alert('Please select at least one activity!');
+      return;
+    }
+
+    // Save to sessionStorage
+    onboardingData.activities = Array.from(selectedActivities);
+    sessionStorage.setItem('onboardingData', JSON.stringify(onboardingData));
+
+    // Move to next step
+    alert('Activities saved! Moving to next step.');
+    // Example: loadStep('step3_billing.html', 3);
+  });
+})();
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<style>
+.activity-card {
+  transition: transform 0.1s, box-shadow 0.2s;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 1rem;
+}
+.activity-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.activity-card.bg-success {
+  border-color: #28a745;
+  background-color: #28a745;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.activity-card small {
+  display: block;
+  font-size: 0.75rem;
+  color: #333;
+}
+</style>
