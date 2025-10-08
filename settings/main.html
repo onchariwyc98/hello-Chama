@@ -110,9 +110,10 @@
       <div class="dropdown">
         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
           <img src="../img/profile1.jpg" alt="Profile" class="profile-pic me-2">
+          <span id="welcomeName"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end shadow">
-          <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+          <li><a class="dropdown-item" href="#" id="profileBtn"><i class="bi bi-person me-2"></i>Profile</a></li>
           <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
         </ul>
       </div>
@@ -132,7 +133,7 @@
 
     <!-- Content Area -->
     <main class="content" id="mainContent">
-      <!-- Default content: Dashboard -->
+      <!-- Dashboard content loaded by default -->
     </main>
   </div>
 
@@ -144,56 +145,39 @@
     const toggleBtn = document.querySelector(".sidebar-toggle");
 
     // Collapse sidebar by default on mobile
-    if (window.innerWidth <= 992) {
-      sidebar.classList.add("collapsed");
-    }
+    if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
 
     // Toggle sidebar on mobile
-    toggleBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("collapsed");
-    });
+    toggleBtn.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
 
-    // Update sidebar on window resize
     window.addEventListener("resize", () => {
       if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
       else sidebar.classList.remove("collapsed");
     });
 
-    // Sidebar page links (Dashboard, Group, Modules, Billing, Terms)
+    // Load user name from sessionStorage
+    const username = sessionStorage.getItem("username") || "User";
+    document.getElementById("welcomeName").textContent = `Hi, ${username}`;
+
+    // Sidebar navigation
     const navLinks = sidebar.querySelectorAll('a[data-page]');
     navLinks.forEach(link => {
       link.addEventListener('click', async (e) => {
         e.preventDefault();
         navLinks.forEach(l => l.classList.remove('active'));
         link.classList.add('active');
-
-        const page = link.getAttribute('data-page');
-        try {
-          const response = await fetch(`${page}.html`);
-          const html = await response.text();
-          content.innerHTML = html;
-        } catch {
-          content.innerHTML = `<p class="text-danger">Failed to load ${page}.html</p>`;
-        }
-
-        // Collapse sidebar on mobile after selection
-        if (window.innerWidth <= 992) sidebar.classList.add('collapsed');
-        // Scroll content into view
-        content.scrollIntoView({ behavior: "smooth" });
+        loadPage(link.getAttribute('data-page'));
+        if (window.innerWidth <= 992) sidebar.classList.add("collapsed"); // close sidebar on mobile
       });
     });
 
-    // Load default page: dashboard
-    async function loadDefault() {
-      try {
-        const response = await fetch('dashboard.html');
-        const html = await response.text();
-        content.innerHTML = html;
-      } catch {
-        content.innerHTML = `<p class="text-danger">Failed to load dashboard.html</p>`;
-      }
-    }
-    loadDefault();
+    // Profile button
+    document.getElementById("profileBtn").addEventListener("click", async (e) => {
+      e.preventDefault();
+      navLinks.forEach(l => l.classList.remove('active'));
+      loadPage("profile_management");
+      if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
+    });
 
     // Logout functionality
     document.getElementById("logoutBtn").addEventListener("click", function(e){
@@ -202,6 +186,21 @@
       localStorage.clear();
       window.location.href = "../index.html";
     });
+
+    // Function to load pages into content area
+    async function loadPage(page) {
+      try {
+        const response = await fetch(`${page}.html`);
+        const html = await response.text();
+        content.innerHTML = html;
+        content.scrollTop = 0; // focus at top
+      } catch {
+        content.innerHTML = `<p class="text-danger">Failed to load ${page}.html</p>`;
+      }
+    }
+
+    // Load default dashboard on page load
+    loadPage("dashboard");
   </script>
 </body>
 </html>

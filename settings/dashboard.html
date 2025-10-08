@@ -1,105 +1,72 @@
-<h3 class="fw-bold text-success mb-3">Settings Dashboard</h3>
+<div class="container-fluid">
+  <h3 class="fw-bold text-success mb-3">
+    <i class="bi bi-speedometer2 me-2"></i>
+    Welcome, <span id="userNameDisplay">User</span>!
+  </h3>
 
-<div class="row g-3">
-  <!-- Profile Settings Card -->
-  <div class="col-md-4">
-    <div class="card shadow-sm border-success h-100">
-      <div class="card-body d-flex flex-column justify-content-between">
-        <h5 class="card-title">Profile Settings</h5>
-        <p class="card-text">Update your personal info, profile picture, and contact details.</p>
-        <a href="#" class="btn btn-success mt-auto">Edit Profile</a>
-      </div>
+  <!-- Single-step progress bar -->
+  <div class="mb-3">
+    <div class="progress" style="height:10px; border-radius:5px;">
+      <div id="stepProgressBar" class="progress-bar" role="progressbar" style="width:0%; transition: width 0.5s;"></div>
     </div>
   </div>
 
-  <!-- Account Security Card -->
-  <div class="col-md-4">
-    <div class="card shadow-sm border-success h-100">
-      <div class="card-body d-flex flex-column justify-content-between">
-        <h5 class="card-title">Account Security</h5>
-        <p class="card-text">Change your password, enable two-factor authentication, or review login activity.</p>
-        <a href="#" class="btn btn-success mt-auto">Security Settings</a>
-      </div>
-    </div>
+  <div class="alert alert-info">
+    <p>Minimum steps to get started:</p>
+    <ul>
+      <li>Create and update your <strong>profile</strong>.</li>
+      <li>Set up your first <strong>group</strong>.</li>
+      <li>Optionally, configure basic <strong>modules</strong>.</li>
+    </ul>
+    <button id="getStartedBtn" class="btn btn-success mt-2">
+      <i class="bi bi-play-fill me-2"></i>Get Started
+    </button>
   </div>
 
-  <!-- Notifications Card -->
-  <div class="col-md-4">
-    <div class="card shadow-sm border-success h-100">
-      <div class="card-body d-flex flex-column justify-content-between">
-        <h5 class="card-title">Notifications</h5>
-        <p class="card-text">Manage email, SMS, and app notification preferences.</p>
-        <a href="#" class="btn btn-success mt-auto">Manage Notifications</a>
-      </div>
-    </div>
-  </div>
+  <div id="contentContainer" class="mt-4"></div>
 </div>
 
-<!-- Quick Actions Section -->
-<div class="mt-4">
-  <h5 class="fw-bold text-success mb-2">Quick Actions</h5>
-  <div class="row g-3">
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-success h-100 p-3">
-        <i class="bi bi-person-fill fs-2 text-success mb-2"></i>
-        <p class="mb-0 fw-bold">Update Profile</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-success h-100 p-3">
-        <i class="bi bi-key-fill fs-2 text-success mb-2"></i>
-        <p class="mb-0 fw-bold">Change Password</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-success h-100 p-3">
-        <i class="bi bi-bell-fill fs-2 text-success mb-2"></i>
-        <p class="mb-0 fw-bold">Notifications</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center shadow-sm border-success h-100 p-3">
-        <i class="bi bi-people-fill fs-2 text-success mb-2"></i>
-        <p class="mb-0 fw-bold">Manage Groups</p>
-      </div>
-    </div>
-  </div>
-</div>
+<script>
+const userNameDisplay = document.getElementById("userNameDisplay");
+const getStartedBtn = document.getElementById("getStartedBtn");
+const contentContainer = document.getElementById("contentContainer");
+const stepProgressBar = document.getElementById("stepProgressBar");
 
-<!-- Optional Account Info Table -->
-<div class="mt-4">
-  <h5 class="fw-bold text-success mb-2">Account Info</h5>
-  <div class="table-responsive">
-    <table class="table table-striped align-middle">
-      <thead>
-        <tr>
-          <th>Setting</th>
-          <th>Value</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Email</td>
-          <td>user@example.com</td>
-          <td><a href="#" class="btn btn-success btn-sm">Edit</a></td>
-        </tr>
-        <tr>
-          <td>Username</td>
-          <td>JohnDoe</td>
-          <td><a href="#" class="btn btn-success btn-sm">Edit</a></td>
-        </tr>
-        <tr>
-          <td>Two-Factor Auth</td>
-          <td>Enabled</td>
-          <td><a href="#" class="btn btn-success btn-sm">Manage</a></td>
-        </tr>
-        <tr>
-          <td>Language</td>
-          <td>English</td>
-          <td><a href="#" class="btn btn-success btn-sm">Change</a></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+// Display user name
+userNameDisplay.textContent = sessionStorage.getItem("fullName") || "User";
+
+// Load content dynamically
+async function loadContent(url, step) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to load');
+    const html = await res.text();
+    contentContainer.innerHTML = html;
+    contentContainer.scrollIntoView({ behavior: "smooth" });
+
+    // Update progress bar
+    switch(step){
+      case 1:
+        stepProgressBar.style.width = "33%";
+        stepProgressBar.className = "progress-bar bg-info";
+        break;
+      case 2:
+        stepProgressBar.style.width = "66%";
+        stepProgressBar.className = "progress-bar bg-warning";
+        break;
+      case 3:
+        stepProgressBar.style.width = "100%";
+        stepProgressBar.className = "progress-bar bg-success";
+        break;
+    }
+  } catch(err) {
+    contentContainer.innerHTML = `<div class="alert alert-danger">Failed to load ${url}</div>`;
+    console.error(err);
+  }
+}
+
+// Get Started button → Load group.html and update progress
+getStartedBtn.addEventListener("click", () => {
+  loadContent('group.html', 1);
+});
+</script>
