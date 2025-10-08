@@ -17,6 +17,7 @@
       overflow-x: hidden;
     }
 
+    /* Navbar */
     .navbar {
       background-color: #1e2a38;
       color: white;
@@ -35,8 +36,10 @@
       display: none;
     }
 
+    /* Layout */
     .layout { display: flex; margin-top: 60px; min-height: calc(100vh - 60px); transition: all 0.3s; }
 
+    /* Sidebar */
     .sidebar {
       width: 250px;
       background: white;
@@ -67,10 +70,13 @@
 
     .modules-container { display: flex; flex-direction: column; gap: 0.3rem; padding-left: 1rem; }
 
+    /* Content */
     .content { flex: 1; padding: 2rem; background-color: #f8f9fa; overflow-y: auto; }
 
+    /* Profile Picture */
     .profile-pic { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #00b894; }
 
+    /* Notification badges */
     .notification-badge {
       position: absolute; top: 0; right: 0;
       background: red; color: white;
@@ -79,10 +85,12 @@
       align-items: center; justify-content: center;
     }
 
+    /* Table styles */
     table th { background: #00b894; color: white; font-weight: 500; }
     table td, table th { vertical-align: middle; }
     .form-check-input:checked { background-color: #00b894; border-color: #00b894; }
 
+    /* Responsive */
     @media (max-width: 992px) {
       .layout { flex-direction: column; }
       .sidebar { position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 1200; }
@@ -124,13 +132,13 @@
     <div class="sidebar" id="sidebarMenu">
       <a href="#" class="active" data-page="dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
       <a href="#" data-page="group"><i class="bi bi-people-fill me-2"></i>Group Setup</a>
-
+      
       <a href="#modulesSubmenu" data-bs-toggle="collapse" class="d-flex align-items-center">
         <i class="bi bi-layers-fill me-2"></i>Modules Setup
         <i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <div class="collapse ps-3 modules-container" id="modulesSubmenu">
-        <a href="#" class="activity-link" data-activity="Welfare">Welfare</a>
+        <a href="#" class="activity-link active" data-activity="Welfare">Welfare</a>
         <a href="#" class="activity-link" data-activity="MerryGoRound">Merry Go Round</a>
         <a href="#" class="activity-link" data-activity="TableBanking">Table Banking</a>
         <a href="#" class="activity-link" data-activity="Loaning">Loaning</a>
@@ -143,31 +151,11 @@
 
     <!-- Content Area -->
     <main class="content" id="mainContent">
-      <h2 class="fw-bold text-success mb-3">Dashboard</h2>
-      <p>Welcome to Hello Chama! This is your central dashboard where you can see group summaries, contributions, and recent updates.</p>
-      <div class="row mt-4">
-        <div class="col-md-4 mb-3">
-          <div class="p-3 bg-white rounded shadow-sm">
-            <h6>Total Members</h6>
-            <h3 class="text-success fw-bold">42</h3>
-          </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="p-3 bg-white rounded shadow-sm">
-            <h6>Total Savings</h6>
-            <h3 class="text-success fw-bold">KSh 145,000</h3>
-          </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="p-3 bg-white rounded shadow-sm">
-            <h6>Active Loans</h6>
-            <h3 class="text-success fw-bold">12</h3>
-          </div>
-        </div>
-      </div>
+      <!-- Default loaded content -->
     </main>
   </div>
 
+  <!-- Bootstrap + JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const sidebar = document.getElementById("sidebarMenu");
@@ -177,7 +165,10 @@
     // Collapse sidebar by default on mobile
     if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
 
+    // Toggle sidebar on mobile
     toggleBtn.addEventListener("click", () => sidebar.classList.toggle("collapsed"));
+
+    // Update sidebar on window resize
     window.addEventListener("resize", () => {
       if (window.innerWidth <= 992) sidebar.classList.add("collapsed");
       else sidebar.classList.remove("collapsed");
@@ -186,23 +177,31 @@
     const navLinks = sidebar.querySelectorAll('a[data-page]');
     const activityLinks = sidebar.querySelectorAll('.activity-link');
 
-    // Function to load a page/module
+    // Function to load page/module
     async function loadContent(pageOrModule, isModule=false) {
       try {
         const file = isModule ? 'modules.html' : `${pageOrModule}.html`;
         const html = await (await fetch(file)).text();
         content.innerHTML = html;
 
-        // Highlight active item
         if(isModule){
           activityLinks.forEach(l => l.classList.remove('active'));
           const active = [...activityLinks].find(l => l.dataset.activity === pageOrModule);
           if(active) active.classList.add('active');
+
           // Auto-expand modules submenu
           const modulesSubmenu = document.getElementById('modulesSubmenu');
           if(!modulesSubmenu.classList.contains('show')){
             new bootstrap.Collapse(modulesSubmenu, {toggle:true});
           }
+
+          // Filter table rows
+          const rows = content.querySelectorAll('tr[data-activities]');
+          rows.forEach(row => {
+            const activities = row.dataset.activities.split(',');
+            row.style.display = activities.includes(pageOrModule) ? '' : 'none';
+          });
+
         } else {
           navLinks.forEach(l => l.classList.remove('active'));
           const active = [...navLinks].find(l => l.dataset.page === pageOrModule);
@@ -218,19 +217,15 @@
       }
     }
 
-    // Load default or last saved page/module
+    // Load last selected page/module or default
     const savedPage = sessionStorage.getItem('selectedPage');
     const savedModule = sessionStorage.getItem('selectedModule');
 
-    if(savedModule){
-      loadContent(savedModule, true);
-    } else if(savedPage){
-      loadContent(savedPage);
-    } else {
-      loadContent('dashboard');
-    }
+    if(savedModule) loadContent(savedModule, true);
+    else if(savedPage) loadContent(savedPage);
+    else loadContent('dashboard');
 
-    // Click events for page links
+    // Page link clicks
     navLinks.forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
@@ -241,7 +236,7 @@
       });
     });
 
-    // Click events for module links
+    // Module link clicks
     activityLinks.forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
@@ -252,6 +247,7 @@
       });
     });
 
+    // Logout
     document.getElementById("logoutBtn").addEventListener("click", function(e){
       e.preventDefault();
       sessionStorage.clear();
