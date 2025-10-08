@@ -1,0 +1,15 @@
+<h4 class="fw-bold text-success mb-3">Step 3: Billing Setup</h4>
+<form id="billingForm">
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="billing" value="Trial" id="trial" checked>
+    <label class="form-check-label" for="trial">Trial (Default)</label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="radio" name="billing" value="Paid" id="paid">
+    <label class="form-check-label" for="paid">Paid</label>
+  </div>
+  <div class="mt-3 d-flex justify-content-between">
+    <button type="button" class="btn btn-secondary" onclick="loadStep('step2_activities.html',2)">Back</button>
+    <button type="submit" class="btn btn-success">Save & Continue</button>
+  </div>
+</form>
