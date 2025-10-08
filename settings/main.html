@@ -184,9 +184,23 @@
     const content = document.getElementById("mainContent");
     const toggleBtn = document.querySelector(".sidebar-toggle");
 
+    // Collapse sidebar by default on mobile
+    if (window.innerWidth <= 992) {
+      sidebar.classList.add("collapsed");
+    }
+
     // Toggle sidebar on mobile
     toggleBtn.addEventListener("click", () => {
       sidebar.classList.toggle("collapsed");
+    });
+
+    // Update sidebar on window resize
+    window.addEventListener("resize", () => {
+      if (window.innerWidth <= 992) {
+        sidebar.classList.add("collapsed");
+      } else {
+        sidebar.classList.remove("collapsed");
+      }
     });
 
     // Sidebar page links
